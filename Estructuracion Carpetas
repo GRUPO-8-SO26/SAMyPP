@@ -1,0 +1,50 @@
+simulador-so/
+├── README.md                 # Howto: requisitos, cómo ejecutar, formato del archivo de entrada
+├── .gitignore                # __pycache__/, *.pyc, build/, dist/, .venv/
+├── main.py                   # Punto de entrada: menú y bucle principal de la simulación
+│
+├── src/
+│   ├── __init__.py
+│   ├── config.py             # Constantes: MEM_SO=100, MEM_USUARIO=450, MAX_PROCESOS=10, MAX_ACTIVOS=5
+│   ├── lista_enlazada.py     # Nodo y ListaEnlazada: insertar, eliminar, buscar, recorrer
+│   ├── proceso.py            # Registro Proceso (PCB) y estados (NUEVO, LISTO, LISTO_SUSP, EJECUCION, TERMINADO)
+│   ├── particion.py          # Registro Partición y operaciones sobre la lista de particiones
+│   ├── memoria.py            # Best-Fit, asignar (split), liberar (fusión de huecos libres)
+│   ├── colas.py              # Colas Nuevos, Listos, Listo/Susp, Terminados + contar_activos
+│   ├── admision.py           # admitir_nuevos y reingresar_desde_suspendidos
+│   ├── planificador.py       # planificar_srtf (con desalojo) y ejecutar_unidad
+│   ├── reloj.py              # Reloj del sistema (clock) y avanzar_reloj
+│   ├── carga.py              # Lectura de archivo, ingreso manual y validaciones
+│   ├── salida.py             # imprimir_estado: CPU, tabla de particiones, colas
+│   └── estadisticas.py       # Retorno, espera, promedios, rendimiento e informe final
+│
+├── data/
+│   ├── procesos_basico.txt        # Caso simple
+│   ├── procesos_desalojo.txt      # Fuerza desalojos por SRTF
+│   ├── procesos_sin_memoria.txt   # Procesos que no entran → Listo/Susp
+│   ├── procesos_mas_de_5.txt      # Prueba del límite de 5 activos
+│   └── procesos_cpu_ociosa.txt    # Huecos entre arribos
+│
+├── tests/
+│   ├── test_lista_enlazada.py
+│   ├── test_memoria.py       # Best-Fit, split y fusión de huecos
+│   ├── test_planificador.py  # Desempates y desalojo
+│   └── test_estadisticas.py  # Verificar contra cálculos hechos a mano
+│
+├── docs/
+│   ├── diagrama_flujo_sprint1.pdf
+│   ├── diagrama_flujo_corregido.pdf
+│   ├── decisiones_de_diseno.md    # Convención de tiempo, desempates, política de reingreso, frag. interna
+│   └── casos_de_prueba.md         # Resultados esperados de cada archivo de data/
+│
+└── entrega/                  # Se arma al final para el campus virtual
+    ├── (ejecutable)          # Por ejemplo generado con PyInstaller
+    ├── (código fuente)
+    └── howto.pdf
+
+Qué va en cada carpeta
+
+src/: un módulo por responsabilidad. Así cada integrante toma una tarjeta de Trello y trabaja en su archivo sin pisar a los demás, lo que reduce los conflictos de merge.
+data/: archivos de entrada que sirven como casos de prueba y también para demostrar el simulador en el video.
+docs/decisiones_de_diseno.md: acá se documentan los desempates, el reingreso y el límite de 5 que discutimos. Es útil para el coloquio.
+entrega/: lo pueden dejar fuera del repo (en .gitignore) y armarlo solo al final.
