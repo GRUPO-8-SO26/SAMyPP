@@ -1,0 +1,15 @@
+Tipo de programacion: ESTRUCTURADA, CON FUNCIONES EN BLOQUES INDEPENDIENTES.
+
+>>DE LOS PROCESOS DE ENTRADA
+Se definen en un archivo .csv de entrada, con los siguientes campos:
+    >proc_id: identificador unico del proceso, falta definir formato (numerico consecutivo, combinacion de letras/numeros, etc)
+    >proc_ta: Tiempo de Arribo del Proceso. Unidades ENTERAS. representa la "unidad de tiempo" en la que el proceso debe intentar pasar de nuevo a listo.
+    >proc_ti: Tiempo de Irrupcion del Proceso. Unidades ENTERAS. Representa el tiempo en unidades de tiempo que el proceso necesita para ejecutarse.
+    >proc_tam: Tamaño del Proceso. Unidades ENTERAS. Representa la cantidad de palabras de memoria que el proceso necesita para alojarse en la Memoria Central. Expresado en "miles de palabras", de modo que un proceso de 15000 palabras se ingresa como "15".
+
+>>DEL ARCHIVO DE ENTRADA
+Los procesos del archivo de entrada deben pasar por un proceso de validacion, antes de ser asignados a la cola de nuevos.
+Validar:
+    Campos de entrada cumplan las restricciones de tipo de datos.
+    proc_tam no puede ser mayor al espacio asignado para el usuario en Memoria Central. 
+    Cantidad maxima de 10 procesos "validos". Descartar los invalidos y mostrar en pantalla los rechazados y su motivo.
