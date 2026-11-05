@@ -1,3 +1,9 @@
+import string
+import os
+import csv
+
+# --- BLOQUE 1: CONFIGURACIÓN Y VARIABLES GLOBALES DEL SISTEMA ---
+
 # Variable global que gobierna el tiempo del simulador
 CLOCK = 0
 
@@ -17,3 +23,7 @@ PROEST_listo = []      # Lista de procesos en memoria listos para ejecutar
 PROEST_lisus = []      # Lista de procesos listos pero suspendidos por falta de memoria
 PROEST_raning = []     # Lista (máximo 1 elemento) con el proceso en ejecución
 PROEST_finished = []   # Lista de procesos terminados para estadísticas
+
+# Registro para estadísticas (guardará los tiempos de cada proceso al finalizar)
+# Estructura: [id, ta, ti, tam, tiempo_retorno, tiempo_espera]
+DATOS_ESTADISTICOS = []
