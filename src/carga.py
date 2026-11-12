@@ -1,9 +1,9 @@
 # ==============================================================================
 # MÓDULO: src/carga.py
 # DESCRIPCIÓN:
-#   Gestiona el ingreso y validación de procesos desde archivo CSV o por
-#   teclado, verificando tipos enteros, rangos de memoria, unicidad de ID y el
-#   tope máximo de 10 procesos válidos antes de encolarlos en PROEST_nuevo.
+#   Gestiona la lectura y validación de procesos desde un archivo CSV,
+#   verificando tipos enteros, rangos de memoria, unicidad de ID y el tope
+#   máximo de 10 procesos válidos antes de encolarlos en PROEST_nuevo.
 #
 # VARIABLES GLOBALES TOCADAS:
 #   - PROEST_nuevo (importada de src.estado; se agregan procesos y se ordena).
@@ -15,7 +15,6 @@
 #     ids_registrados, proc_id, proc_ta, proc_ti, proc_tam, proceso.
 #   - En cargar_desde_csv: ruta_archivo, ids_registrados, archivo, lector,
 #     columnas_requeridas, fila, fila_limpia, e.
-#   - En cargar_manual: ids_registrados, opcion, raw_id, raw_ta, raw_ti, raw_tam.
 #
 # OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
 #   - Importadas: csv.DictReader, os.path.exists.
@@ -91,7 +90,6 @@ def cargar_desde_csv(ruta_archivo):
                 return False
 
             for fila in lector:
-                # Normalizar claves por si hay espacios en el encabezado
                 fila_limpia = {k.strip(): v for k, v in fila.items()}
                 _validar_y_agregar_proceso(
                     fila_limpia["proc_id"],
@@ -107,26 +105,3 @@ def cargar_desde_csv(ruta_archivo):
     except Exception as e:
         print(f"Error al procesar el archivo CSV: {e}")
         return False
-
-
-def cargar_manual():
-    """Permite al usuario ingresar procesos por teclado hasta un máximo de 10 válidos."""
-    ids_registrados = set()
-    print(f"\n--- CARGA MANUAL DE PROCESOS (Máximo {MAX_PROCESOS_VALIDOS} válidos) ---")
-
-    while len(PROEST_nuevo) < MAX_PROCESOS_VALIDOS:
-        opcion = input(
-            f"\nProcesos válidos cargados: {len(PROEST_nuevo)}/{MAX_PROCESOS_VALIDOS}. ¿Agregar proceso? (s/n): "
-        ).strip().lower()
-        if opcion != "s":
-            break
-
-        raw_id = input("  proc_id (ej. P1): ")
-        raw_ta = input("  proc_ta (tiempo de arribo, entero >= 0): ")
-        raw_ti = input("  proc_ti (tiempo de irrupción, entero > 0): ")
-        raw_tam = input(f"  proc_tam (tamaño en K, entero 1..{TAM_USUARIO}): ")
-
-        _validar_y_agregar_proceso(raw_id, raw_ta, raw_ti, raw_tam, ids_registrados)
-
-    PROEST_nuevo.sort(key=lambda p: p[IDX_TA])
-    return len(PROEST_nuevo) > 0

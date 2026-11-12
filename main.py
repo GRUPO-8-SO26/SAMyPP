@@ -1,9 +1,9 @@
 # ==============================================================================
 # MÓDULO: main.py
 # DESCRIPCIÓN:
-#   Punto de entrada del simulador. Orquesta el menú principal (carga CSV o
-#   manual) y el bucle de simulación paso a paso deteniéndose en cada arribo o
-#   finalización de proceso.
+#   Punto de entrada del simulador. Orquesta el menú principal (carga directa
+#   desde archivo CSV) y el bucle de simulación paso a paso deteniéndose en
+#   cada arribo o finalización de proceso.
 #
 # VARIABLES GLOBALES TOCADAS:
 #   - PROEST_nuevo, PROEST_listo, PROEST_lisus, PROEST_raning
@@ -11,15 +11,15 @@
 #
 # VARIABLES LOCALES CREADAS:
 #   - En ejecutar_simulacion: hubo_reingreso, hubo_arribo, termino_proceso.
-#   - En menu_principal: opcion, ruta.
+#   - En menu_principal: ruta_csv, opcion.
 #
 # OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
 #   - Importadas: reiniciar_estado() (src.estado), reset_clock() y clocking()
-#     (src.reloj), cargar_desde_csv() y cargar_manual() (src.carga),
-#     admitir_nuevos() y reingresar_suspendidos() (src.admision),
-#     planificar_srtf() y ejecutar_unidad_cpu() (src.planificador),
-#     limpiar_pantalla(), mostrar_estado_sistema() y pausar_simulacion()
-#     (src.salida), mostrar_informe_estadistico() (src.estadisticas).
+#     (src.reloj), cargar_desde_csv() (src.carga), admitir_nuevos() y
+#     reingresar_suspendidos() (src.admision), planificar_srtf() y
+#     ejecutar_unidad_cpu() (src.planificador), limpiar_pantalla(),
+#     mostrar_estado_sistema() y pausar_simulacion() (src.salida),
+#     mostrar_informe_estadistico() (src.estadisticas).
 #   - Interna del bloque: ejecutar_simulacion() (invocada por menu_principal).
 # ==============================================================================
 
@@ -31,7 +31,7 @@ from src.estado import (
     reiniciar_estado,
 )
 from src.reloj import reset_clock, clocking
-from src.carga import cargar_desde_csv, cargar_manual
+from src.carga import cargar_desde_csv
 from src.admision import admitir_nuevos, reingresar_suspendidos
 from src.planificador import planificar_srtf, ejecutar_unidad_cpu
 from src.salida import limpiar_pantalla, mostrar_estado_sistema, pausar_simulacion
@@ -75,7 +75,9 @@ def ejecutar_simulacion():
 
 
 def menu_principal():
-    """Menú de inicio para elegir carga por archivo CSV o ingreso manual."""
+    """Menú de inicio para ejecutar la simulación desde el archivo CSV del proyecto."""
+    ruta_csv = "data/procesos.csv"
+
     while True:
         reiniciar_estado()
         limpiar_pantalla()
@@ -83,33 +85,18 @@ def menu_principal():
         print("   SIMULADOR DE GESTIÓN DE PROCESOS Y MEMORIA (MVT)   ")
         print("        Planificación: SRTF  |  Memoria: Best-Fit     ")
         print("======================================================")
-        print("1. Cargar procesos desde archivo CSV (data/procesos.csv)")
-        print("2. Ingresar ruta de archivo CSV personalizada") #quitar
-        print("3. Cargar procesos manualmente por teclado")  #quitar
-        print("4. Salir")
+        print(f"1. Iniciar simulación desde archivo CSV ({ruta_csv})")
+        print("2. Salir")
 
-        opcion = input("\nSeleccione una opción y presione ENTER: ").strip()
+        opcion = input("\nSeleccione una opción: ").strip()
 
         if opcion == "1":
-            if cargar_desde_csv("data/procesos.csv"):
+            if cargar_desde_csv(ruta_csv):
                 pausar_simulacion()
                 ejecutar_simulacion()
             pausar_simulacion()
 
         elif opcion == "2":
-            ruta = input("Ingrese la ruta del archivo CSV: ").strip()
-            if cargar_desde_csv(ruta):
-                pausar_simulacion()
-                ejecutar_simulacion()
-            pausar_simulacion()
-
-        elif opcion == "3":
-            if cargar_manual():
-                pausar_simulacion()
-                ejecutar_simulacion()
-            pausar_simulacion()
-
-        elif opcion == "4":
             print("Saliendo del simulador...")
             break
         else:
