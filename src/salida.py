@@ -11,10 +11,28 @@ def limpiar_pantalla():
 
 
 def imprimir_mapa_mc():
-    """Muestra la Memoria Central (550K) en filas de 25 celdas."""
-    print("\n--- MAPA VISUAL DE MEMORIA CENTRAL (SO: # | Libre: ~) ---")
+    """Muestra la Memoria Central (550K) en filas de 25 celdas perfectamente alineadas,
+    asignando una letra única (A-Z) a cada proceso activo en el dibujo.
+    """
+    simbolos_mapa = {}
+    siguiente_letra = ord("A")
+
+    # Recorrer memoria para asignar 1 letra única a cada proc_id presente
+    for celda in memoria_central:
+        if celda not in ("#", "~") and celda not in simbolos_mapa:
+            simbolos_mapa[celda] = chr(siguiente_letra)
+            siguiente_letra += 1
+
+    print("\n--- MAPA VISUAL DE MEMORIA CENTRAL ---")
+    referencias = ["SO: #", "Libre: ~"] + [f"{pid}: {letra}" for pid, letra in simbolos_mapa.items()]
+    print(f"Referencias -> {' | '.join(referencias)}")
+
     for i in range(0, len(memoria_central), 25):
-        print(" ".join(memoria_central[i : i + 25]))
+        fila_visual = [
+            celda if celda in ("#", "~") else simbolos_mapa[celda]
+            for celda in memoria_central[i : i + 25]
+        ]
+        print(" ".join(fila_visual))
 
 
 def mostrar_estado_sistema(motivo_evento):

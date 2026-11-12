@@ -63,7 +63,7 @@ def menu_principal():
         print("3. Cargar procesos manualmente por teclado")
         print("4. Salir")
 
-        opcion = input("\nSeleccione una opción: ").strip()
+        opcion = input("\nSeleccione una opción y presione ENTER: ").strip()
 
         if opcion == "1":
             if cargar_desde_csv("data/procesos.csv"):
