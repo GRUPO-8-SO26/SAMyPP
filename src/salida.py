@@ -2,30 +2,49 @@
 # MÓDULO: src/salida.py
 # DESCRIPCIÓN:
 #   Administra toda la presentación por consola en cada evento clave del
-#   simulador: estado del procesador, tabla de particiones MVT, colas de
-#   planificación, mapa visual alineado de Memoria Central y pausas de control.
+#   simulador: resumen de totales de memoria y estados, estado del procesador,
+#   tabla de particiones MVT, colas de planificación, mapa visual alineado de
+#   Memoria Central y pausas de control.
 #
 # VARIABLES GLOBALES TOCADAS:
-#   - memoria_central, PROEST_listo, PROEST_lisus, PROEST_raning,
+#   - memoria_central, PROEST_nuevo, PROEST_listo, PROEST_lisus, PROEST_raning,
 #     PROEST_finished (importadas de src.estado; solo lectura).
-#   - IDX_ID, IDX_RESTANTE, IDX_TAM (importadas de src.config; solo lectura).
+#   - TAM_SO, TAM_USUARIO, MEM_LIBRE, MAX_PROCESOS_ACTIVOS, IDX_ID, IDX_TA,
+#     IDX_RESTANTE, IDX_TAM (importadas de src.config; solo lectura).
 #
 # VARIABLES LOCALES CREADAS:
 #   - En imprimir_mapa_mc: simbolos_mapa, siguiente_letra, celda, referencias,
 #     pid, letra, i, fila_visual.
-#   - En mostrar_estado_sistema: motivo_evento, p, part, listos_str, lisus_str,
-#     fin_str.
+#   - En mostrar_estado_sistema: motivo_evento, mem_libre_total,
+#     mem_ocupada_usuario, activos_total, total_cargados, p, part,
+#     listos_str, lisus_str, nuevos_str, fin_str.
 #
 # OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
 #   - Importadas: os.system, generar_tabla_particiones() (src.memoria),
-#     obtener_clock() (src.reloj).
-#   - Auxiliar interna del bloque: imprimir_mapa_mc() (invocada por
-#     mostrar_estado_sistema).
+#     contar_procesos_activos() (src.estado), obtener_clock() (src.reloj).
+#   - Auxiliar interna del bloque: imprimir_mapa_mc().
 # ==============================================================================
 
 import os
-from src.config import IDX_ID, IDX_RESTANTE, IDX_TAM
-from src.estado import memoria_central, PROEST_listo, PROEST_lisus, PROEST_raning, PROEST_finished
+from src.config import (
+    TAM_SO,
+    TAM_USUARIO,
+    MEM_LIBRE,
+    MAX_PROCESOS_ACTIVOS,
+    IDX_ID,
+    IDX_TA,
+    IDX_RESTANTE,
+    IDX_TAM,
+)
+from src.estado import (
+    memoria_central,
+    PROEST_nuevo,
+    PROEST_listo,
+    PROEST_lisus,
+    PROEST_raning,
+    PROEST_finished,
+    contar_procesos_activos,
+)
 from src.memoria import generar_tabla_particiones
 from src.reloj import obtener_clock
 
@@ -36,19 +55,16 @@ def limpiar_pantalla():
 
 
 def imprimir_mapa_mc():
-    """Muestra la Memoria Central (550K) en filas de 25 celdas perfectamente alineadas,
-    asignando una letra única (A-Z) a cada proceso activo en el dibujo.
-    """
+    """Muestra la Memoria Central (550K) en filas de 25 celdas perfectamente alineadas."""
     simbolos_mapa = {}
     siguiente_letra = ord("A")
 
-    # Recorrer memoria para asignar 1 letra única a cada proc_id presente
     for celda in memoria_central:
         if celda not in ("#", "~") and celda not in simbolos_mapa:
             simbolos_mapa[celda] = chr(siguiente_letra)
             siguiente_letra += 1
 
-    print("\n--- MAPA VISUAL DE MEMORIA CENTRAL ---")
+    print("\n--- MAPA VISUAL DE MEMORIA CENTRAL (550K) ---")
     referencias = ["SO: #", "Libre: ~"] + [f"{pid}: {letra}" for pid, letra in simbolos_mapa.items()]
     print(f"Referencias -> {' | '.join(referencias)}")
 
@@ -62,9 +78,32 @@ def imprimir_mapa_mc():
 
 def mostrar_estado_sistema(motivo_evento):
     """Presenta en pantalla el estado completo requerido por la consigna."""
-    print("\n" + "=" * 72)
+    mem_libre_total = memoria_central[TAM_SO:].count(MEM_LIBRE)
+    mem_ocupada_usuario = TAM_USUARIO - mem_libre_total
+    activos_total = contar_procesos_activos()
+    total_cargados = (
+        len(PROEST_nuevo)
+        + activos_total
+        + len(PROEST_finished)
+    )
+
+    print("\n" + "=" * 74)
     print(f"INSTANTE DE TIEMPO (CLOCK): {obtener_clock()}  |  DISPARADOR: {motivo_evento}")
-    print("=" * 72)
+    print("=" * 74)
+
+    # Resumen de totales de memoria y distribución por estados
+    print("\n0) RESUMEN DE TOTALES Y UBICACIÓN:")
+    print(
+        f"   -> Memoria Usuario:  {mem_ocupada_usuario}K ocupados + {mem_libre_total}K libres = {TAM_USUARIO}K totales"
+    )
+    print(
+        f"   -> Activos en Sist.: {activos_total}/{MAX_PROCESOS_ACTIVOS} "
+        f"(Ejecución: {len(PROEST_raning)} | Listos: {len(PROEST_listo)} | Listos/Susp: {len(PROEST_lisus)})"
+    )
+    print(
+        f"   -> Total Procesos:   {total_cargados} "
+        f"(Nuevos: {len(PROEST_nuevo)} | Activos: {activos_total} | Terminados: {len(PROEST_finished)})"
+    )
 
     # 1. Estado del procesador
     print("\n1) ESTADO DEL PROCESADOR:")
@@ -82,17 +121,19 @@ def mostrar_estado_sistema(motivo_evento):
         print(f"   {part[0]:<10} | {part[1]:<12} | {part[2]:<12} | {part[3]:<15} | {part[4]:<14}")
 
     # 3. Estado de las colas de listos y listos/suspendidos
-    print("\n3) COLAS DE PLANIFICACIÓN:")
+    print("\n3) COLAS DE PLANIFICACIÓN Y ESTADOS:")
     listos_str = [f"{p[IDX_ID]} (rest:{p[IDX_RESTANTE]})" for p in PROEST_listo]
     lisus_str = [f"{p[IDX_ID]} (tam:{p[IDX_TAM]}K)" for p in PROEST_lisus]
+    nuevos_str = [f"{p[IDX_ID]} (TA:{p[IDX_TA]})" for p in PROEST_nuevo]
     fin_str = [p[IDX_ID] for p in PROEST_finished]
 
     print(f"   -> Cola de Listos:              {listos_str if listos_str else '[]'}")
     print(f"   -> Cola de Listos/Suspendidos:  {lisus_str if lisus_str else '[]'}")
-    print(f"   -> Terminados (control):        {fin_str if fin_str else '[]'}")
+    print(f"   -> Cola de Nuevos (esperando):  {nuevos_str if nuevos_str else '[]'}")
+    print(f"   -> Procesos Terminados:         {fin_str if fin_str else '[]'}")
 
     imprimir_mapa_mc()
-    print("=" * 72)
+    print("=" * 74)
 
 
 def pausar_simulacion():
