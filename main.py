@@ -1,3 +1,28 @@
+# ==============================================================================
+# MÓDULO: main.py
+# DESCRIPCIÓN:
+#   Punto de entrada del simulador. Orquesta el menú principal (carga CSV o
+#   manual) y el bucle de simulación paso a paso deteniéndose en cada arribo o
+#   finalización de proceso.
+#
+# VARIABLES GLOBALES TOCADAS:
+#   - PROEST_nuevo, PROEST_listo, PROEST_lisus, PROEST_raning
+#     (importadas de src.estado; solo lectura para condición de corte del bucle).
+#
+# VARIABLES LOCALES CREADAS:
+#   - En ejecutar_simulacion: hubo_reingreso, hubo_arribo, termino_proceso.
+#   - En menu_principal: opcion, ruta.
+#
+# OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
+#   - Importadas: reiniciar_estado() (src.estado), reset_clock() y clocking()
+#     (src.reloj), cargar_desde_csv() y cargar_manual() (src.carga),
+#     admitir_nuevos() y reingresar_suspendidos() (src.admision),
+#     planificar_srtf() y ejecutar_unidad_cpu() (src.planificador),
+#     limpiar_pantalla(), mostrar_estado_sistema() y pausar_simulacion()
+#     (src.salida), mostrar_informe_estadistico() (src.estadisticas).
+#   - Interna del bloque: ejecutar_simulacion() (invocada por menu_principal).
+# ==============================================================================
+
 from src.estado import (
     PROEST_nuevo,
     PROEST_listo,
@@ -59,8 +84,8 @@ def menu_principal():
         print("        Planificación: SRTF  |  Memoria: Best-Fit     ")
         print("======================================================")
         print("1. Cargar procesos desde archivo CSV (data/procesos.csv)")
-        print("2. Ingresar ruta de archivo CSV personalizada")
-        print("3. Cargar procesos manualmente por teclado")
+        print("2. Ingresar ruta de archivo CSV personalizada") #quitar
+        print("3. Cargar procesos manualmente por teclado")  #quitar
         print("4. Salir")
 
         opcion = input("\nSeleccione una opción y presione ENTER: ").strip()

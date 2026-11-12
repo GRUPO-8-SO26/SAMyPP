@@ -1,3 +1,28 @@
+# ==============================================================================
+# MÓDULO: src/memoria.py
+# DESCRIPCIÓN:
+#   Implementa la administración de Memoria Central bajo esquema de particiones
+#   variables (MVT) con política de asignación Best-Fit, liberación contigua y
+#   construcción de la tabla de particiones y fragmentación.
+#
+# VARIABLES GLOBALES TOCADAS:
+#   - memoria_central (importada de src.estado; leída y modificada celda a celda).
+#   - PROEST_lisus (importada de src.estado; solo lectura para evaluar
+#     fragmentación externa en generar_tabla_particiones).
+#   - TAM_SO, TAM_TOTAL_MC, MEM_LIBRE (importadas de src.config; solo lectura).
+#
+# VARIABLES LOCALES CREADAS:
+#   - En cargar_en_memoria / liberar_memoria: dir_inicio, tam, proc_id, i.
+#   - En asignar_bestfit: tam, proc_id, dir_tentativa, menor_hueco, i,
+#     inicio_hueco, tam_hueco.
+#   - En generar_tabla_particiones: tabla, i, part_id, hay_suspendidos,
+#     contenido_actual, inicio, tam_particion, proc_asignado, fragmentacion.
+#
+# OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
+#   - Auxiliar interna del bloque: cargar_en_memoria() (invocada por
+#     asignar_bestfit).
+# ==============================================================================
+
 from src.config import TAM_SO, TAM_TOTAL_MC, MEM_LIBRE
 from src.estado import memoria_central, PROEST_lisus
 

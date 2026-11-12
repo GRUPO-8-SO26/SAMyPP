@@ -1,3 +1,22 @@
+# ==============================================================================
+# MÓDULO: src/config.py
+# DESCRIPCIÓN:
+#   Define las constantes globales de configuración del simulador (tamaños de
+#   memoria, símbolos visuales, límites de procesos e índices del registro PCB).
+#
+# VARIABLES GLOBALES TOCADAS / DEFINIDAS:
+#   - Define (solo lectura desde otros módulos):
+#     TAM_SO, TAM_USUARIO, TAM_TOTAL_MC, MEM_LIBRE, MEM_SO,
+#     MAX_PROCESOS_VALIDOS, MAX_PROCESOS_ACTIVOS,
+#     IDX_ID, IDX_TA, IDX_TI, IDX_TAM, IDX_RESTANTE, IDX_DIR, IDX_FIN.
+#
+# VARIABLES LOCALES CREADAS:
+#   - Ninguna (módulo puramente declarativo sin funciones).
+#
+# OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
+#   - Ninguna.
+# ==============================================================================
+
 # Constantes de Memoria Central (en miles de palabras - K)
 TAM_SO = 100
 TAM_USUARIO = 450

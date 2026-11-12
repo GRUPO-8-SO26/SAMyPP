@@ -1,3 +1,25 @@
+# ==============================================================================
+# MÓDULO: src/admision.py
+# DESCRIPCIÓN:
+#   Controla la transición de procesos hacia memoria principal (PROEST_listo) o
+#   suspensión (PROEST_lisus), tanto para nuevos arribos desde PROEST_nuevo como
+#   para el reingreso de procesos suspendidos al liberarse memoria.
+#
+# VARIABLES GLOBALES TOCADAS:
+#   - PROEST_nuevo, PROEST_listo, PROEST_lisus (importadas de src.estado;
+#     modificadas mediante .append() y .pop()).
+#   - MAX_PROCESOS_ACTIVOS, IDX_ID, IDX_TA, IDX_TAM, IDX_DIR (importadas de
+#     src.config; solo lectura).
+#
+# VARIABLES LOCALES CREADAS:
+#   - En reingresar_suspendidos: hubo_cambio, i, proc, dir_asignada.
+#   - En admitir_nuevos: hubo_arribo, clock_actual, i, proc, dir_asignada.
+#
+# OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
+#   - Importadas: contar_procesos_activos() (src.estado), asignar_bestfit()
+#     (src.memoria), obtener_clock() (src.reloj).
+# ==============================================================================
+
 from src.config import MAX_PROCESOS_ACTIVOS, IDX_ID, IDX_TA, IDX_TAM, IDX_DIR
 from src.estado import PROEST_nuevo, PROEST_listo, PROEST_lisus, contar_procesos_activos
 from src.memoria import asignar_bestfit

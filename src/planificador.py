@@ -1,3 +1,27 @@
+# ==============================================================================
+# MÓDULO: src/planificador.py
+# DESCRIPCIÓN:
+#   Implementa la Planificación a Corto Plazo mediante el algoritmo SRTF
+#   (Shortest Remaining Time First) apropiativo, gestionando selección de CPU,
+#   desalojos, ejecución por unidad de tiempo y registro al finalizar procesos.
+#
+# VARIABLES GLOBALES TOCADAS:
+#   - PROEST_listo, PROEST_raning, PROEST_finished, DATOS_ESTADISTICOS
+#     (importadas de src.estado; modificadas al despachar, desalojar y terminar).
+#   - IDX_ID, IDX_TA, IDX_TI, IDX_TAM, IDX_RESTANTE, IDX_DIR, IDX_FIN
+#     (importadas de src.config; solo lectura).
+#
+# VARIABLES LOCALES CREADAS:
+#   - En _buscar_indice_menor_srtf: idx_mejor, idx, actual, mejor.
+#   - En planificar_srtf: idx_mejor, candidato, en_ejecucion.
+#   - En ejecutar_unidad_cpu: proc, tiempo_fin, retorno, espera.
+#
+# OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
+#   - Importadas: liberar_memoria() (src.memoria), obtener_clock() (src.reloj).
+#   - Auxiliar interna del bloque: _buscar_indice_menor_srtf() (invocada por
+#     planificar_srtf).
+# ==============================================================================
+
 from src.config import IDX_ID, IDX_TA, IDX_TI, IDX_TAM, IDX_RESTANTE, IDX_DIR, IDX_FIN
 from src.estado import PROEST_listo, PROEST_raning, PROEST_finished, DATOS_ESTADISTICOS
 from src.memoria import liberar_memoria

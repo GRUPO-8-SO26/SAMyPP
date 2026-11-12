@@ -1,3 +1,28 @@
+# ==============================================================================
+# MÓDULO: src/salida.py
+# DESCRIPCIÓN:
+#   Administra toda la presentación por consola en cada evento clave del
+#   simulador: estado del procesador, tabla de particiones MVT, colas de
+#   planificación, mapa visual alineado de Memoria Central y pausas de control.
+#
+# VARIABLES GLOBALES TOCADAS:
+#   - memoria_central, PROEST_listo, PROEST_lisus, PROEST_raning,
+#     PROEST_finished (importadas de src.estado; solo lectura).
+#   - IDX_ID, IDX_RESTANTE, IDX_TAM (importadas de src.config; solo lectura).
+#
+# VARIABLES LOCALES CREADAS:
+#   - En imprimir_mapa_mc: simbolos_mapa, siguiente_letra, celda, referencias,
+#     pid, letra, i, fila_visual.
+#   - En mostrar_estado_sistema: motivo_evento, p, part, listos_str, lisus_str,
+#     fin_str.
+#
+# OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
+#   - Importadas: os.system, generar_tabla_particiones() (src.memoria),
+#     obtener_clock() (src.reloj).
+#   - Auxiliar interna del bloque: imprimir_mapa_mc() (invocada por
+#     mostrar_estado_sistema).
+# ==============================================================================
+
 import os
 from src.config import IDX_ID, IDX_RESTANTE, IDX_TAM
 from src.estado import memoria_central, PROEST_listo, PROEST_lisus, PROEST_raning, PROEST_finished

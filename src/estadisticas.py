@@ -1,3 +1,22 @@
+# ==============================================================================
+# MÓDULO: src/estadisticas.py
+# DESCRIPCIÓN:
+#   Calcula y emite el informe estadístico final al concluir la simulación:
+#   tiempo de retorno y espera por proceso, promedios globales y rendimiento
+#   (throughput) del sistema.
+#
+# VARIABLES GLOBALES TOCADAS:
+#   - DATOS_ESTADISTICOS (importada de src.estado; solo lectura).
+#
+# VARIABLES LOCALES CREADAS:
+#   - En mostrar_informe_estadistico: suma_retorno, suma_espera, cantidad,
+#     reg, proc_id, proc_ta, proc_ti, retorno, espera, prom_retorno,
+#     prom_espera, tiempo_total, rendimiento.
+#
+# OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
+#   - Importada: obtener_clock() (src.reloj).
+# ==============================================================================
+
 from src.estado import DATOS_ESTADISTICOS
 from src.reloj import obtener_clock
 

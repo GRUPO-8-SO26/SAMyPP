@@ -1,3 +1,27 @@
+# ==============================================================================
+# MÓDULO: src/carga.py
+# DESCRIPCIÓN:
+#   Gestiona el ingreso y validación de procesos desde archivo CSV o por
+#   teclado, verificando tipos enteros, rangos de memoria, unicidad de ID y el
+#   tope máximo de 10 procesos válidos antes de encolarlos en PROEST_nuevo.
+#
+# VARIABLES GLOBALES TOCADAS:
+#   - PROEST_nuevo (importada de src.estado; se agregan procesos y se ordena).
+#   - TAM_USUARIO, MAX_PROCESOS_VALIDOS, IDX_TA (importadas de src.config;
+#     solo lectura).
+#
+# VARIABLES LOCALES CREADAS:
+#   - En _validar_y_agregar_proceso: raw_id, raw_ta, raw_ti, raw_tam,
+#     ids_registrados, proc_id, proc_ta, proc_ti, proc_tam, proceso.
+#   - En cargar_desde_csv: ruta_archivo, ids_registrados, archivo, lector,
+#     columnas_requeridas, fila, fila_limpia, e.
+#   - En cargar_manual: ids_registrados, opcion, raw_id, raw_ta, raw_ti, raw_tam.
+#
+# OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
+#   - Importadas: csv.DictReader, os.path.exists.
+#   - Auxiliar interna del bloque: _validar_y_agregar_proceso().
+# ==============================================================================
+
 import csv
 import os
 from src.config import TAM_USUARIO, MAX_PROCESOS_VALIDOS, IDX_TA

@@ -1,3 +1,24 @@
+# ==============================================================================
+# MÓDULO: src/estado.py
+# DESCRIPCIÓN:
+#   Mantiene las estructuras de datos compartidas en memoria (arreglo de
+#   Memoria Central, colas de estados de procesos y tabla de estadísticas) y
+#   provee funciones de inicialización y conteo del grado de multiprogramación.
+#
+# VARIABLES GLOBALES TOCADAS:
+#   - Definidas y mutadas en este módulo:
+#     memoria_central, PROEST_nuevo, PROEST_listo, PROEST_lisus,
+#     PROEST_raning, PROEST_finished, DATOS_ESTADISTICOS.
+#   - Importadas (solo lectura desde src.config):
+#     TAM_SO, TAM_USUARIO, MEM_SO, MEM_LIBRE.
+#
+# VARIABLES LOCALES CREADAS:
+#   - Ninguna (opera directamente sobre las listas compartidas).
+#
+# OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
+#   - Métodos nativos de listas: .clear(), len(), slicing [:].
+# ==============================================================================
+
 from src.config import TAM_SO, TAM_USUARIO, MEM_SO, MEM_LIBRE
 
 # Memoria Central inicializada: 100K para SO (#) y 450K libres (~)
