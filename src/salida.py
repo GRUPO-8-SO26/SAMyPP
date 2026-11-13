@@ -4,7 +4,7 @@
 #   Administra toda la presentación por consola en cada evento clave del
 #   simulador: resumen de totales de memoria y estados, estado del procesador,
 #   tabla de particiones MVT, colas de planificación, mapa visual alineado de
-#   Memoria Central y pausas de control.
+#   Memoria Central, condiciones del sistema y pausas de control.
 #
 # VARIABLES GLOBALES TOCADAS:
 #   - memoria_central, PROEST_nuevo, PROEST_listo, PROEST_lisus, PROEST_raning,
@@ -54,6 +54,31 @@ def limpiar_pantalla():
     os.system("cls" if os.name == "nt" else "clear")
 
 
+def mostrar_condiciones_sistema():
+    """Muestra las condiciones del archivo CSV, columnas, tipos de datos y reglas del sistema."""
+    limpiar_pantalla()
+    print("========================================================================")
+    print("         CONDICIONES DE ENTRADA Y RESTRICCIONES DEL SIMULADOR           ")
+    print("========================================================================")
+    print("\n1) CONDICIONES DEL ARCHIVO DE ENTRADA:")
+    print("   * Ubicación y formato:  Archivo CSV en 'data/procesos.csv' (separado por comas).")
+    print("   * Encabezado obligatorio: Debe incluir exactamente los nombres de columnas en la fila 1.")
+    print("   * Límite de carga:      Máximo 10 procesos válidos (los excedentes se descartan).")
+
+    print("\n2) CONDICIONES DE COLUMNAS Y TIPOS DE DATOS:")
+    print("   * proc_id  -> Texto / Identificador único no vacío (ej: P1, P2, A).")
+    print("   * proc_ta  -> Entero >= 0  (Tiempo de arribo en unidades de tiempo).")
+    print("   * proc_ti  -> Entero > 0   (Tiempo de irrupción / ráfaga de CPU).")
+    print("   * proc_tam -> Entero 1..450 (Tamaño del proceso en K; no puede superar 450K).")
+
+    print("\n3) REGLAS DE MEMORIA Y PLANIFICACIÓN:")
+    print("   * Memoria Central:      550K totales (100K Sistema Operativo + 450K Usuario).")
+    print("   * Gestión de Memoria:   Particiones Variables (MVT) con Best-Fit (sin compactación).")
+    print("   * Planificación CPU:    SRTF (Shortest Remaining Time First - Apropiativo).")
+    print("   * Multiprogramación:    Máximo 5 procesos activos (Ejecución + Listos + Listos/Susp).")
+    print("========================================================================")
+
+
 def imprimir_mapa_mc():
     """Muestra la Memoria Central (550K) en filas de 25 celdas perfectamente alineadas."""
     simbolos_mapa = {}
@@ -81,17 +106,13 @@ def mostrar_estado_sistema(motivo_evento):
     mem_libre_total = memoria_central[TAM_SO:].count(MEM_LIBRE)
     mem_ocupada_usuario = TAM_USUARIO - mem_libre_total
     activos_total = contar_procesos_activos()
-    total_cargados = (
-        len(PROEST_nuevo)
-        + activos_total
-        + len(PROEST_finished)
-    )
+    total_cargados = len(PROEST_nuevo) + activos_total + len(PROEST_finished)
 
     print("\n" + "=" * 74)
     print(f"INSTANTE DE TIEMPO (CLOCK): {obtener_clock()}  |  DISPARADOR: {motivo_evento}")
     print("=" * 74)
 
-    # Resumen de totales de memoria y distribución por estados
+    # 0. Resumen de totales y ubicación
     print("\n0) RESUMEN DE TOTALES Y UBICACIÓN:")
     print(
         f"   -> Memoria Usuario:  {mem_ocupada_usuario}K ocupados + {mem_libre_total}K libres = {TAM_USUARIO}K totales"

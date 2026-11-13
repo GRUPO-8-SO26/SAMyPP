@@ -2,8 +2,8 @@
 # MÓDULO: main.py
 # DESCRIPCIÓN:
 #   Punto de entrada del simulador. Orquesta el menú principal (carga directa
-#   desde archivo CSV) y el bucle de simulación paso a paso deteniéndose en
-#   cada arribo o finalización de proceso.
+#   desde archivo CSV y consulta de condiciones de entrada) y el bucle de
+#   simulación paso a paso deteniéndose en cada arribo o finalización.
 #
 # VARIABLES GLOBALES TOCADAS:
 #   - PROEST_nuevo, PROEST_listo, PROEST_lisus, PROEST_raning
@@ -18,7 +18,8 @@
 #     (src.reloj), cargar_desde_csv() (src.carga), admitir_nuevos() y
 #     reingresar_suspendidos() (src.admision), planificar_srtf() y
 #     ejecutar_unidad_cpu() (src.planificador), limpiar_pantalla(),
-#     mostrar_estado_sistema() y pausar_simulacion() (src.salida),
+#     mostrar_estado_sistema(), pausar_simulacion() y
+#     mostrar_condiciones_sistema() (src.salida),
 #     mostrar_informe_estadistico() (src.estadisticas).
 #   - Interna del bloque: ejecutar_simulacion() (invocada por menu_principal).
 # ==============================================================================
@@ -34,7 +35,12 @@ from src.reloj import reset_clock, clocking
 from src.carga import cargar_desde_csv
 from src.admision import admitir_nuevos, reingresar_suspendidos
 from src.planificador import planificar_srtf, ejecutar_unidad_cpu
-from src.salida import limpiar_pantalla, mostrar_estado_sistema, pausar_simulacion
+from src.salida import (
+    limpiar_pantalla,
+    mostrar_estado_sistema,
+    pausar_simulacion,
+    mostrar_condiciones_sistema,
+)
 from src.estadisticas import mostrar_informe_estadistico
 
 
@@ -75,7 +81,7 @@ def ejecutar_simulacion():
 
 
 def menu_principal():
-    """Menú de inicio para ejecutar la simulación desde el archivo CSV del proyecto."""
+    """Menú de inicio para ejecutar la simulación o consultar las condiciones del CSV."""
     ruta_csv = "data/procesos.csv"
 
     while True:
@@ -86,7 +92,8 @@ def menu_principal():
         print("        Planificación: SRTF  |  Memoria: Best-Fit     ")
         print("======================================================")
         print(f"1. Iniciar simulación desde archivo CSV ({ruta_csv})")
-        print("2. Salir")
+        print("2. Ver condiciones del archivo CSV, columnas y sistema")
+        print("3. Salir")
 
         opcion = input("\nSeleccione una opción: ").strip()
 
@@ -97,6 +104,10 @@ def menu_principal():
             pausar_simulacion()
 
         elif opcion == "2":
+            mostrar_condiciones_sistema()
+            pausar_simulacion()
+
+        elif opcion == "3":
             print("Saliendo del simulador...")
             break
         else:
