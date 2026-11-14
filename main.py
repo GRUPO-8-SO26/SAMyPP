@@ -43,6 +43,8 @@ from src.salida import (
 )
 from src.estadisticas import mostrar_informe_estadistico
 
+import src.Logo_UTN as logutn
+import src.intro_outro as io
 
 def ejecutar_simulacion():
     """Bucle principal del simulador con pausas en cada arribo o finalización de proceso."""
@@ -83,10 +85,13 @@ def ejecutar_simulacion():
 def menu_principal():
     """Menú de inicio para ejecutar la simulación o consultar las condiciones del CSV."""
     ruta_csv = "data/procesos.csv"
+    logutn.logo_UTN_animado()
+    io.pantalla_inicio()
 
     while True:
         reiniciar_estado()
         limpiar_pantalla()
+        print("\n")
         print("======================================================")
         print("   SIMULADOR DE GESTIÓN DE PROCESOS Y MEMORIA (MVT)   ")
         print("        Planificación: SRTF  |  Memoria: Best-Fit     ")
@@ -94,7 +99,6 @@ def menu_principal():
         print(f"1. Iniciar simulación desde archivo CSV ({ruta_csv})")
         print("2. Ver condiciones del archivo CSV, columnas y sistema")
         print("3. Salir")
-
         opcion = input("\nSeleccione una opción: ").strip()
 
         if opcion == "1":
@@ -109,7 +113,9 @@ def menu_principal():
 
         elif opcion == "3":
             print("Saliendo del simulador...")
+            io.pantalla_final()
             break
+
         else:
             print("Opción inválida.")
             pausar_simulacion()
@@ -117,3 +123,4 @@ def menu_principal():
 
 if __name__ == "__main__":
     menu_principal()
+
