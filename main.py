@@ -1,16 +1,18 @@
 # ==============================================================================
 # MÓDULO: main.py
 # DESCRIPCIÓN:
-#   Punto de entrada del simulador. Orquesta el menú principal (carga directa
-#   desde archivo CSV y consulta de condiciones de entrada) y el bucle de
-#   simulación paso a paso deteniéndose en cada arribo o finalización.
+#   Punto de entrada del simulador. Orquesta la presentación inicial (logo UTN e
+#   intro), el menú principal (carga directa desde archivo CSV y consulta de
+#   condiciones de entrada) y el bucle de simulación paso a paso deteniéndose en
+#   cada arribo o finalización.
 #
 # VARIABLES GLOBALES TOCADAS:
 #   - PROEST_nuevo, PROEST_listo, PROEST_lisus, PROEST_raning
 #     (importadas de src.estado; solo lectura para condición de corte del bucle).
 #
 # VARIABLES LOCALES CREADAS:
-#   - En ejecutar_simulacion: hubo_reingreso, hubo_arribo, termino_proceso.
+#   - En ejecutar_simulacion: evento_ya_mostrado, hubo_reingreso, hubo_arribo,
+#     termino_proceso.
 #   - En menu_principal: ruta_csv, opcion.
 #
 # OTROS BLOQUES O FUNCIONES USADAS (EXTERNAS / INTERNAS):
@@ -20,7 +22,9 @@
 #     ejecutar_unidad_cpu() (src.planificador), limpiar_pantalla(),
 #     mostrar_estado_sistema(), pausar_simulacion() y
 #     mostrar_condiciones_sistema() (src.salida),
-#     mostrar_informe_estadistico() (src.estadisticas).
+#     mostrar_informe_estadistico() (src.estadisticas),
+#     logutn.logo_UTN_animado() (src.Logo_UTN),
+#     io.pantalla_inicio() e io.pantalla_final() (src.intro_outro).
 #   - Interna del bloque: ejecutar_simulacion() (invocada por menu_principal).
 # ==============================================================================
 
