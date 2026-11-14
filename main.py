@@ -73,11 +73,30 @@ def ejecutar_simulacion():
         # 6. Avanzar el reloj del sistema en 1 unidad
         clocking(1)
 
-        # 7. Si terminó un proceso en este ciclo, liberar/reingresar y mostrar estado obligatorio
+        # 7. Si terminó un proceso en este ciclo, actualizar estado del nuevo CLOCK
+        #    (reingresos, arribos y próximo proceso en CPU) antes de mostrar pantalla
         if termino_proceso:
             reingresar_suspendidos()
+            admitir_nuevos()
+            planificar_srtf()
             mostrar_estado_sistema("FINALIZACIÓN DE PROCESO EN EJECUCIÓN")
             pausar_simulacion()
+
+            # Evita repetir pausa en la siguiente iteración para este mismo CLOCK
+            # porque los arribos y la planificación de este instante ya se procesaron
+            if PROEST_nuevo or PROEST_listo or PROEST_lisus or PROEST_raning:
+                termino_proceso = ejecutar_unidad_cpu()
+                clocking(1)
+                while termino_proceso:
+                    reingresar_suspendidos()
+                    admitir_nuevos()
+                    planificar_srtf()
+                    mostrar_estado_sistema("FINALIZACIÓN DE PROCESO EN EJECUCIÓN")
+                    pausar_simulacion()
+                    if not (PROEST_nuevo or PROEST_listo or PROEST_lisus or PROEST_raning):
+                        break
+                    termino_proceso = ejecutar_unidad_cpu()
+                    clocking(1)
 
     mostrar_informe_estadistico()
 
