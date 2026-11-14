@@ -51,6 +51,7 @@ def ejecutar_simulacion():
     reset_clock()
     mostrar_estado_sistema("INICIO DE SIMULACIÓN (Memoria Inicializada)")
     pausar_simulacion()
+    evento_ya_mostrado = False
 
     while PROEST_nuevo or PROEST_listo or PROEST_lisus or PROEST_raning:
         # 1. Intentar reingresar procesos suspendidos si hay memoria disponible
@@ -62,10 +63,12 @@ def ejecutar_simulacion():
         # 3. Planificar CPU con SRTF (incluye desalojo si corresponde)
         planificar_srtf()
 
-        # 4. Si llegó un nuevo proceso (o reingresó), mostrar estado y pausar según consigna
-        if hubo_arribo or hubo_reingreso:
+        # 4. Si llegó un nuevo proceso (o reingresó) y no se mostró ya al finalizar otro, pausar
+        if (hubo_arribo or hubo_reingreso) and not evento_ya_mostrado:
             mostrar_estado_sistema("ARRIBO / ADMISIÓN DE PROCESO")
             pausar_simulacion()
+
+        evento_ya_mostrado = False
 
         # 5. Ejecutar 1 unidad de tiempo en CPU
         termino_proceso = ejecutar_unidad_cpu()
@@ -73,30 +76,15 @@ def ejecutar_simulacion():
         # 6. Avanzar el reloj del sistema en 1 unidad
         clocking(1)
 
-        # 7. Si terminó un proceso en este ciclo, actualizar estado del nuevo CLOCK
-        #    (reingresos, arribos y próximo proceso en CPU) antes de mostrar pantalla
+        # 7. Si terminó un proceso, actualizar el estado completo en el nuevo CLOCK
+        #    (reingresos, arribos y próximo proceso en CPU) antes de imprimir
         if termino_proceso:
             reingresar_suspendidos()
             admitir_nuevos()
             planificar_srtf()
             mostrar_estado_sistema("FINALIZACIÓN DE PROCESO EN EJECUCIÓN")
             pausar_simulacion()
-
-            # Evita repetir pausa en la siguiente iteración para este mismo CLOCK
-            # porque los arribos y la planificación de este instante ya se procesaron
-            if PROEST_nuevo or PROEST_listo or PROEST_lisus or PROEST_raning:
-                termino_proceso = ejecutar_unidad_cpu()
-                clocking(1)
-                while termino_proceso:
-                    reingresar_suspendidos()
-                    admitir_nuevos()
-                    planificar_srtf()
-                    mostrar_estado_sistema("FINALIZACIÓN DE PROCESO EN EJECUCIÓN")
-                    pausar_simulacion()
-                    if not (PROEST_nuevo or PROEST_listo or PROEST_lisus or PROEST_raning):
-                        break
-                    termino_proceso = ejecutar_unidad_cpu()
-                    clocking(1)
+            evento_ya_mostrado = True
 
     mostrar_informe_estadistico()
 
