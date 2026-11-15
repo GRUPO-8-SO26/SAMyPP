@@ -8,12 +8,12 @@
 
 ## Integrantes del Grupo 8
 
-* Burgos, Guido
+* Burgos Kaenel, Guido Martin
 * Dos Santo, Ayel Daniela
-* Gonzalez, María Teresa
-* Marin Sosa, Jose Manuel
-* Pastori, Jose Maria
-* Retamozo, Luciano
+* González, María Teresa
+* Marín Sosa, José Manuel
+* Pastori, Jose María
+* Retamozo Cabaña, Ivo Luciano Emanuel
 * Saleh, Maximo
 
 ---
