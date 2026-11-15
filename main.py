@@ -116,11 +116,12 @@ def menu_principal():
             if cargar_desde_csv(ruta_csv):
                 pausar_simulacion()
                 ejecutar_simulacion()
-            pausar_simulacion()
+            print("\n\nIMPORTANTE: Si vuelve al menú, se perderán los datos simulados.")
+            input("Presione ENTER para volver al menú...") #pausar_simulacion()
 
         elif opcion == "2":
             mostrar_condiciones_sistema()
-            pausar_simulacion()
+            input("\nPresione ENTER para volver al menú...") #pausar_simulacion()
 
         elif opcion == "3":
             print("Saliendo del simulador...")
@@ -129,7 +130,7 @@ def menu_principal():
 
         else:
             print("Opción inválida.")
-            pausar_simulacion()
+            input("\nPresione ENTER para volver al menú...") #pausar_simulacion()
 
 
 if __name__ == "__main__":
