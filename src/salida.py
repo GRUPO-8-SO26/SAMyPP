@@ -148,9 +148,9 @@ def mostrar_estado_sistema(motivo_evento):
     nuevos_str = [f"{p[IDX_ID]} (TA:{p[IDX_TA]})" for p in PROEST_nuevo]
     fin_str = [p[IDX_ID] for p in PROEST_finished]
 
+    print(f"   -> Cola de Nuevos (esperando):  {nuevos_str if nuevos_str else '[]'}")
     print(f"   -> Cola de Listos:              {listos_str if listos_str else '[]'}")
     print(f"   -> Cola de Listos/Suspendidos:  {lisus_str if lisus_str else '[]'}")
-    print(f"   -> Cola de Nuevos (esperando):  {nuevos_str if nuevos_str else '[]'}")
     print(f"   -> Procesos Terminados:         {fin_str if fin_str else '[]'}")
 
     imprimir_mapa_mc()
