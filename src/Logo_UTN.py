@@ -1,3 +1,4 @@
+import os
 import time
 import msvcrt # Librería nativa de Windows para detectar teclas sin congelar el programa
 
@@ -43,19 +44,48 @@ def Logo_UTN_nombre():
     print("\n          >> PRESIONA ENTER PARA INGRESAR <<          ")
 
 ## Logos Dinamicos
-def esperar_con_deteccion(segundos):
+
+# Detección del sistema operativo
     """
     Revisa cada 0.05 segundos si el usuario presionó Enter para
     salir inmediatamente sin trabar la animación.
     """
-    pasos = int(segundos / 0.05)
-    for _ in range(pasos):
-        if msvcrt.kbhit():  # ¿El usuario presionó una tecla?
-            tecla = msvcrt.getch()
-            if tecla == b'\r':  # b'\r' es la tecla Enter en bytes
-                return True     # Señal de que queremos salir
-        time.sleep(0.05)
-    return False
+if os.name == 'nt':
+    import msvcrt
+    
+    def esperar_con_deteccion(segundos):
+        pasos = int(segundos / 0.05)
+        for _ in range(pasos):
+            if msvcrt.kbhit():
+                tecla = msvcrt.getch()
+                if tecla == b'\r':
+                    return True
+            time.sleep(0.05)
+        return False
+else:
+    import sys
+    import select
+    import tty
+    import termios
+    
+    def esperar_con_deteccion(segundos):
+        pasos = int(segundos / 0.05)
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(sys.stdin.fileno())
+            for _ in range(pasos):
+                i, o, e = select.select([sys.stdin], [], [], 0.05)
+                if i:
+                    tecla = sys.stdin.read(1)
+                    if tecla == '\r' or tecla == '\n':
+                        return True
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return False
+
+
+
 
 def logo_UTN_animado():
     while True:
