@@ -4,7 +4,8 @@
 #   Administra toda la presentación por consola en cada evento clave del
 #   simulador: resumen de totales de memoria y estados, estado del procesador,
 #   tabla de particiones MVT, colas de planificación, mapa visual alineado de
-#   Memoria Central, condiciones del sistema y pausas de control.
+#   Memoria Central (indicando fragmentación con '*' cuando hay procesos en
+#   Listos/Suspendidos), condiciones del sistema y pausas de control.
 #
 # VARIABLES GLOBALES TOCADAS:
 #   - memoria_central, PROEST_nuevo, PROEST_listo, PROEST_lisus, PROEST_raning,
@@ -13,8 +14,9 @@
 #     IDX_RESTANTE, IDX_TAM (importadas de src.config; solo lectura).
 #
 # VARIABLES LOCALES CREADAS:
-#   - En imprimir_mapa_mc: simbolos_mapa, siguiente_letra, celda, referencias,
-#     pid, letra, i, fila_visual.
+#   - En imprimir_mapa_mc: simbolos_mapa, siguiente_letra, hay_suspendidos,
+#     simbolo_libre, etiqueta_libre, celda, referencias, pid, letra, i,
+#     fila_visual.
 #   - En mostrar_estado_sistema: motivo_evento, mem_libre_total,
 #     mem_ocupada_usuario, activos_total, total_cargados, p, part,
 #     listos_str, lisus_str, nuevos_str, fin_str.
@@ -83,6 +85,9 @@ def imprimir_mapa_mc():
     """Muestra la Memoria Central (550K) en filas de 25 celdas perfectamente alineadas."""
     simbolos_mapa = {}
     siguiente_letra = ord("A")
+    hay_suspendidos = len(PROEST_lisus) > 0
+    simbolo_libre = "*" if hay_suspendidos else "~"
+    etiqueta_libre = "Fragmentación: *" if hay_suspendidos else "Libre: ~"
 
     for celda in memoria_central:
         if celda not in ("#", "~") and celda not in simbolos_mapa:
@@ -90,14 +95,20 @@ def imprimir_mapa_mc():
             siguiente_letra += 1
 
     print("\n--- MAPA VISUAL DE MEMORIA CENTRAL (550K) ---")
-    referencias = ["SO: #", "Libre: ~"] + [f"{pid}: {letra}" for pid, letra in simbolos_mapa.items()]
+    referencias = ["SO: #", etiqueta_libre] + [
+        f"{pid}: {letra}" for pid, letra in simbolos_mapa.items()
+    ]
     print(f"Referencias -> {' | '.join(referencias)}")
 
     for i in range(0, len(memoria_central), 25):
-        fila_visual = [
-            celda if celda in ("#", "~") else simbolos_mapa[celda]
-            for celda in memoria_central[i : i + 25]
-        ]
+        fila_visual = []
+        for celda in memoria_central[i : i + 25]:
+            if celda == "#":
+                fila_visual.append("#")
+            elif celda == "~":
+                fila_visual.append(simbolo_libre)
+            else:
+                fila_visual.append(simbolos_mapa[celda])
         print(" ".join(fila_visual))
 
 
