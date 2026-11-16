@@ -1,0 +1,37 @@
+1) Descargar el programa completo en una carpeta.
+El contenido debe quedar de la siguiente manera
+
+	SAMyPP
+	├── data
+	│   ├── lotes_pruebas.txt
+	│   └── procesos.csv
+	├── docs
+	│   ├── definiciones_disenio.md
+	│   └── Estructuracion Carpetas
+	├── LICENSE
+	├── main.py
+	├── README.md
+	└── src
+	    ├── __init__.py
+	    ├── admision.py
+	    ├── carga.py
+	    ├── config.py
+	    ├── estadisticas.py
+	    ├── estado.py
+	    ├── intro_outro.py
+	    ├── Logo_UTN.py
+	    ├── memoria.py
+	    ├── planificador.py
+	    ├── reloj.py
+	    └── salida.py
+
+2) Cargar procesos en archivo "procesos.csv". Si no se modifica, tiene una configuracion inicial previamente cargada.
+En el archivo 'lotes_pruebas.txt' hay varios modelos de lotes de procesos, que se pueden copiar y pegar dentro de procesos.csv
+Desde el programa se puede consultar las características que debe cumplir el archivo de carga para ser tomado correctamente.
+
+3) Abrir la terminal en la carpeta raiz, y llamar a la ejecucion del modulo main.py con pyton 3.14 en adelante.
+
+4) Seguir las instrucciones del programa para la ejecucion del mismo. Al finalizar la simulacion y voler al menu principal.
+Sin cerrar el programa se puede volver a modificar el archivo "procesos.csv" para correr una nueva simulacion con el lote cargado.
+
+5) Para salir, se selecciona desde el menu la opcion correspondiente.
