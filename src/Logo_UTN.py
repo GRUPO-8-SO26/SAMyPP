@@ -1,10 +1,12 @@
 import os
 import time
 
+
 ## Limpiador de Pantalla
 def limpiar_pantalla():
     # Funciona sin importar el SO (Windows, macOS o Linux)
     os.system("cls" if os.name == "nt" else "clear")
+
 
 ## Logos Estáticos
 def Logo_UTN_arania():
@@ -24,6 +26,7 @@ def Logo_UTN_arania():
     print(r"  ██==============================================██  ")
     print("\n          >> PRESIONA ENTER PARA INGRESAR <<          ")
 
+
 def Logo_UTN_nombre():
     limpiar_pantalla()
     print(r"  ██==============================================██  ")
@@ -40,6 +43,7 @@ def Logo_UTN_nombre():
     print(r"  ||░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░||  ")
     print(r"  ██==============================================██  ")
     print("\n          >> PRESIONA ENTER PARA INGRESAR <<          ")
+
 
 ## Detección de tecla Enter según el Sistema Operativo
 if os.name == "nt":
@@ -67,6 +71,7 @@ else:
             return True
         return False
 
+
 def logo_UTN_animado():
     while True:
         # 1. Mostrar logo araña
@@ -84,6 +89,7 @@ def logo_UTN_animado():
     limpiar_pantalla()
     print(r"<< Iniciando programa... >>")
     time.sleep(1)
+
 
 if __name__ == "__main__":
     logo_UTN_animado()
