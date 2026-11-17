@@ -1,3 +1,6 @@
+Repositorio del proyecto:
+https://github.com/GRUPO-8-SO26/SAMyPP
+
 1) Descargar el programa completo en una carpeta.
 El contenido debe quedar de la siguiente manera
 
